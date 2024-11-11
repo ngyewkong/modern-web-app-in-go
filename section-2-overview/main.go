@@ -31,6 +31,14 @@ type User struct {
 	BirthDate time.Time // from go std lib
 }
 
+// we can also associate function to a struc
+// by adding a receiver after the func keyword
+// receiver will be in (varName *struct) which points to the struct
+func (m *User) setFirstName() string {
+	// this makes the function can access information from the struct
+	return m.FirstName
+}
+
 // necessary main function
 // can only have one main() function and the main function takes no args & return nth
 // to run this code (terminal execute go run fileName.go)
@@ -107,6 +115,15 @@ func main() {
 	// calling the attributes of User
 	// Elon Musk 0001-01-01 00:00:00 +0000 UTC
 	log.Println(user.FirstName, user.LastName, user.BirthDate)
+
+	var user2 User
+	user2.FirstName = "Bill"
+	user2.LastName = "Gates"
+
+	log.Println("user is set to", user.FirstName)
+	// can call the function which is part of the User struct
+	// advantage is can have biz logic in the function instead of accessing the attributes directly
+	log.Println("user2 is set to", user2.setFirstName())
 }
 
 // other functions can be declared outside of the main function
