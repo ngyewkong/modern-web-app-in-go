@@ -10,6 +10,9 @@ import (
 // package level variables declared outside out of the main function
 var myName string
 
+// other ways to declare/init variables
+var numString = "seven" // go compiler auto infer numString to be string
+
 // necessary main function
 // can only have one main() function and the main function takes no args & return nth
 // to run this code (terminal execute go run fileName.go)
@@ -64,6 +67,18 @@ func main() {
 
 	// myString actually become RED despite the function not returning anything
 	log.Println("After func call, colour is now set to", myString)
+
+	// numString is declared outside of this main function (available to all function in this package)
+	log.Println("numString is", numString)
+
+	// scoped to local function
+	var numString2 = "eight"
+
+	// Println() is a variadic function (can take one or more or no parameters)
+	log.Println("numString2 is", numString2)
+
+	// function that show scopes in var
+	saySomethingWithSameVarNames(numString2)
 }
 
 // other functions can be declared outside of the main function
@@ -90,4 +105,11 @@ func changeUsingPointer(s *string) {
 
 	// this means go to that memory address and change the contents from whatever it used to be to what I set in newValue (RED)
 	*s = newValue
+}
+
+func saySomethingWithSameVarNames(numString2 string) (string, string) {
+	log.Println("this numString is being called in saySomethingWithSameVarName is", numString, "which is package level var")
+	log.Println("this numString2 is being called in saySomethingWithSameVarName is", numString2, "which is parameter passed in function call")
+
+	return numString2, "helllloooo"
 }
