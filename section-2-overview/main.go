@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 )
 
 // package level variables declared outside out of the main function
@@ -12,6 +13,23 @@ var myName string
 
 // other ways to declare/init variables
 var numString = "seven" // go compiler auto infer numString to be string
+
+// Custom Data Type using Struct
+// when primitive data types are not enough
+// eg injecting a Person into a db (firstName, lastName, phoneNum, age, birthDate)
+// signature
+// type nameOfStruct struct {}
+type User struct {
+	// go do not have OOP (Public, Private, Protected)
+	// so if CapFirstLetter -> accessible/visible outside of this package
+	// then if smallFirstLetter -> within the package is accessible
+	// eg. log.Fatalf is visible outside of the log package
+	FirstName string
+	LastName  string
+	PhoneNum  string
+	Age       int
+	BirthDate time.Time // from go std lib
+}
 
 // necessary main function
 // can only have one main() function and the main function takes no args & return nth
@@ -79,6 +97,16 @@ func main() {
 
 	// function that show scopes in var
 	saySomethingWithSameVarNames(numString2)
+
+	// creating a User
+	user := User{
+		FirstName: "Elon",
+		LastName:  "Musk",
+	}
+
+	// calling the attributes of User
+	// Elon Musk 0001-01-01 00:00:00 +0000 UTC
+	log.Println(user.FirstName, user.LastName, user.BirthDate)
 }
 
 // other functions can be declared outside of the main function
