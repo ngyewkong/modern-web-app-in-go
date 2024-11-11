@@ -2,7 +2,10 @@
 package main
 
 // import the fmt package from the std lib
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 // package level variables declared outside out of the main function
 var myName string
@@ -45,6 +48,22 @@ func main() {
 
 	// print "This is repeated 8"
 	fmt.Println(repeatedLines, numOfTimes)
+
+	// showing use of pointers
+	var myString string
+	myString = "GREEN"
+
+	log.Println("Colour is now set to", myString)
+	// call the pointer function
+	// pointer is just smth that points to a specific location in memory and gets that particular location in memory
+	// so instead of passing the parameter myString as an actual variable
+	// we have to pass a reference to that variable
+	// using & ampersand (&myString) -> reference
+	// * -> pointer
+	changeUsingPointer(&myString)
+
+	// myString actually become RED despite the function not returning anything
+	log.Println("After func call, colour is now set to", myString)
 }
 
 // other functions can be declared outside of the main function
@@ -60,4 +79,15 @@ func saySomething() string {
 // function can return multiple objects
 func sayMultipleThings() (string, int) {
 	return "This is repeated", 8
+}
+
+// Pointers in golang
+func changeUsingPointer(s *string) {
+
+	// this s will be the memory address when the reference of the variable is being passed in
+	log.Println("s pointer is set to", s)
+	newValue := "RED"
+
+	// this means go to that memory address and change the contents from whatever it used to be to what I set in newValue (RED)
+	*s = newValue
 }
