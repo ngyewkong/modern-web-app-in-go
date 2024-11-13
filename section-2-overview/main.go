@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"time"
 )
 
@@ -124,6 +125,77 @@ func main() {
 	// can call the function which is part of the User struct
 	// advantage is can have biz logic in the function instead of accessing the attributes directly
 	log.Println("user2 is set to", user2.setFirstName())
+
+	// Map
+
+	// the usual declaration of creating a map using make()
+	// follow map[dataType of the index]dataType of the value
+	myMap := make(map[string]string)
+	myMap["dog"] = "Samson"
+	myMap["other-dog"] = "Cassie"
+
+	//Map can be overwritten
+	myMap["dog"] = "Russell"
+
+	// this not the conventional way
+	// var myOtherMap map[string]string
+
+	log.Println(myMap["dog"])       // print Samson to the console (overwrite by line 137 to Russell)
+	log.Println(myMap["other-dog"]) // print Cassie
+
+	// map of string int
+	numMap := make(map[string]int)
+	numMap["first"] = 1
+	numMap["second"] = 2
+
+	log.Println(numMap["first"])
+	log.Println(numMap["second"])
+
+	// map can hold any data type including struct
+	structMap := make(map[string]User)
+
+	randomUser := User{
+		FirstName: "Jeff",
+		LastName:  "Bezos",
+	}
+
+	structMap["randomUser"] = randomUser
+
+	log.Println(structMap["randomUser"].FirstName) // shld print Jeff
+
+	// maps are not sorted, have to look up by key
+	// maps are mutable
+
+	// slices
+
+	// this mean a slice of strings (can put more than one thing)
+	var nameSlice []string
+	// adding to slice can use append(slice, newValue)
+	nameSlice = append(nameSlice, "Ryan")
+	nameSlice = append(nameSlice, "John")
+
+	log.Println(nameSlice) // return [Ryan John]
+
+	var numSlice []int
+
+	numSlice = append(numSlice, 5)
+	numSlice = append(numSlice, 0)
+	numSlice = append(numSlice, 20)
+
+	log.Println(numSlice) // return [5 0 20]
+
+	// sorting a slice using sort.Ints() sort in increasing order by default
+	sort.Ints(numSlice)
+
+	log.Println(numSlice) // return [0 5 20]
+
+	// shorthand to declare slices
+	rangeNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	log.Println(rangeNum)
+
+	// getting a subset of a slice using splice [firstIndex including, lastIndex excluding]
+	log.Println(rangeNum[0:2]) // return [1 2]
+	log.Println(rangeNum[6:9]) // return [7 8 9]
 }
 
 // other functions can be declared outside of the main function
