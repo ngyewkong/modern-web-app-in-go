@@ -196,6 +196,42 @@ func main() {
 	// getting a subset of a slice using splice [firstIndex including, lastIndex excluding]
 	log.Println(rangeNum[0:2]) // return [1 2]
 	log.Println(rangeNum[6:9]) // return [7 8 9]
+
+	// control flow
+	// if statements
+	isTrue := false // type boolean
+	bigNum := 1000
+
+	if isTrue == true {
+		log.Println("isTrue is", isTrue)
+	} else {
+		log.Println("isTrue is", isTrue)
+	}
+
+	// multi conditionals
+	if !isTrue && bigNum < 100 {
+		log.Println("1st if-else: Both conditions satisfied")
+	} else if bigNum < 2000 && isTrue {
+		log.Println("2nd if-else: Both conditions satisfied")
+	} else if bigNum > 1000 || isTrue {
+		log.Println("3rd if-else: either condition satisfied")
+	} else if bigNum == 1000 && !isTrue {
+		log.Println("Last if-else: Both conditions satisfied")
+	}
+
+	// switch statements
+	myAnimal := "monkey"
+
+	// switch statements in go -> break out of the case once one condition is met (auto break out)
+	switch myAnimal {
+	case "cat":
+		log.Println("animal is cat")
+	case "dog":
+		log.Println("animal is dog")
+	default:
+		log.Println("animal is not cat or dog")
+	}
+
 }
 
 // other functions can be declared outside of the main function
