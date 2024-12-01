@@ -232,6 +232,72 @@ func main() {
 		log.Println("animal is not cat or dog")
 	}
 
+	// looping and ranging over data
+	// only for loop available in golang
+	// print out to console 0 to 10
+	for i := 0; i <= 10; i++ {
+		log.Println("i is:", i)
+	}
+
+	animals := []string{"chat", "chien", "cheval", "poisson", "vanche"}
+
+	// iterate over the string slice using range
+	// give two arguments (i & animal) -> i is the current iteration & the second argument is the value
+	for i, animal := range animals {
+		log.Println(i, animal) // print out 0 chat 1 chien ...
+	}
+
+	// but if we only need the value but not the iteration
+	// we cannot NOT USE i in the loop as golang do not compile as we have unused variables
+	// we have to use the underscore _ (blank identifier)
+	for _, animal := range animals {
+		log.Println(animal) // print out chat chien cheval poisson vanche ...
+	}
+
+	// range function can range over slices, maps, even strings
+	pets := make(map[string]string)
+	pets["cat"] = "Garfield"
+	pets["dog"] = "Carrefour"
+
+	// this will iterate the pets map, which is a map of string (key) string (value)
+	// this will print out the keys & values of the map
+	for petType, petName := range pets {
+		log.Println(petType, petName)
+	}
+
+	// range over string
+	var firstLine = "Once upon a time, there is ..."
+
+	// the values printed is a byte (golang doc)
+	// string in golang is actually a slice of bytes or runes
+	for i, char := range firstLine {
+		log.Println(i, ":", char)
+	}
+
+	// strings are actually immutable
+	// so reassignment is actually complex (involving destroying existing object in memory and creating new object)
+	firstLine = "x"
+	for i, char := range firstLine {
+		log.Println(i, ":", char)
+	}
+
+	// we can iterate over custom objects
+	type EmailUser struct {
+		FirstName string
+		LastName  string
+		Email     string
+		Age       int
+	}
+	var emailUsers []EmailUser
+	emailUsers = append(emailUsers, EmailUser{"Jeff", "Bezos", "jeffbezos@amzn.com", 45})
+	emailUsers = append(emailUsers, EmailUser{"Tim", "Cook", "timcook@apple.com", 55})
+	emailUsers = append(emailUsers, EmailUser{"Jensen", "Huang", "jensenhuang@nvda.com", 50})
+	emailUsers = append(emailUsers, EmailUser{"Donald", "Trump", "donaldjtrump@trump.com", 65})
+
+	// print out the values of each element in emailUsers array that is a custom struct EmailUser
+	for _, l := range emailUsers {
+		log.Println(l.FirstName, l.LastName, l.Email, l.Age)
+	}
 }
 
 // other functions can be declared outside of the main function
