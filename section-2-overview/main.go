@@ -40,6 +40,25 @@ func (m *User) setFirstName() string {
 	return m.FirstName
 }
 
+// interfaces in golang
+type Animal interface {
+	// inside this interface definition is the list of functions that any var that satisfies the animal interface must have
+	Says() string
+	NumberOfLegs() int
+}
+
+// two custom types DOg & Gorilla
+type Dog struct {
+	Name  string
+	Breed string
+}
+
+type Gorilla struct {
+	Name          string
+	Color         string
+	NumberOfTeeth int
+}
+
 // necessary main function
 // can only have one main() function and the main function takes no args & return nth
 // to run this code (terminal execute go run fileName.go)
@@ -298,6 +317,57 @@ func main() {
 	for _, l := range emailUsers {
 		log.Println(l.FirstName, l.LastName, l.Email, l.Age)
 	}
+
+	// demo interface
+	dog := Dog{
+		Name:  "Samson",
+		Breed: "Golden Retriever",
+	}
+
+	// invoke PrintInfo() function that is using the Animal Interface
+	// setting PrintInfo(dog) -> compiler error
+	// cannot use dog (variable of type Dog) as Animal value in argument to PrintInfo: Dog does not implement Animal (missing method NumberOfLegs)
+	// need to create functions for Dog Struct that implements the two required methods for Animal Interface
+	// &dog passes the reference to dog instead as the receiver are pointer types
+	PrintInfo(&dog) // print "This animal says Woof and has 4 legs"
+
+	gorilla := Gorilla{
+		Name:          "King Kong",
+		Color:         "Black",
+		NumberOfTeeth: 38,
+	}
+
+	// pass by reference
+	PrintInfo(&gorilla) // This animal says OOOFFFFF and has 2 legs
+
+	// TYPES that need pointers -> (slices, maps, functions)
+	// TYPES that do not need pointers -> (Strings, Ints, Floats, Booleans, Arrays, Structs)
+}
+
+// utility function that use the Animal Interface
+func PrintInfo(a Animal) {
+	// calls the available methods from the interface
+	fmt.Println("This animal says", a.Says(), "and has", a.NumberOfLegs(), "legs")
+}
+
+// to make the Dog struct type satisfy the Animal interface
+// need to implement the two required functions of the interfaces for Dog struct
+// func (receiver structType) requiredMethod() returnType
+// in golang usually receivers are pointer types as it just make things faster (*Dog)
+func (d *Dog) Says() string {
+	return "Woof"
+}
+
+func (d *Dog) NumberOfLegs() int {
+	return 4
+}
+
+func (d *Gorilla) Says() string {
+	return "OOOFFFFF"
+}
+
+func (d *Gorilla) NumberOfLegs() int {
+	return 2
 }
 
 // other functions can be declared outside of the main function
