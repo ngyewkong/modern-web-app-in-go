@@ -1,12 +1,19 @@
 // package declaration by convention is main
 package main
 
+// creating out own packages
+// good practice to use the github name of the proj (in case you push to github later)
+// go mod init github.com/username/nameOfPackage
+// to use a custom package just need to import
+
 // import the fmt package from the std lib
 import (
 	"fmt"
 	"log"
 	"sort"
 	"time"
+
+	"github.com/ngyewkong/myniceprogram/helpers"
 )
 
 // package level variables declared outside out of the main function
@@ -342,6 +349,11 @@ func main() {
 
 	// TYPES that need pointers -> (slices, maps, functions)
 	// TYPES that do not need pointers -> (Strings, Ints, Floats, Booleans, Arrays, Structs)
+
+	// using custom package
+	var myVar helpers.SomeType
+	myVar.TypeName = "Some Name"
+	log.Println(myVar.TypeName)
 }
 
 // utility function that use the Animal Interface
