@@ -8,6 +8,7 @@ package main
 
 // import the fmt package from the std lib
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"sort"
@@ -65,6 +66,15 @@ type Gorilla struct {
 	Name          string
 	Color         string
 	NumberOfTeeth int
+}
+
+// create a struct to handle the attributes
+type Person struct {
+	// special tag to handle/receive json (json:key_name_of_json)
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	HairColor string `json:"hair_color"`
+	HasDog    bool   `json:"has_dog"`
 }
 
 // necessary main function
@@ -374,6 +384,84 @@ func main() {
 	// getting the CalculateValue randomNumber from the int chan
 	randNum := <-intChan
 	log.Println(randNum) // printing random numbers 0 to 999
+
+	// reading & writing JSON
+	// note the JSON cannot have unnecessary commas (end of last k-v pair, end of last entry)
+	myJson := `
+	[
+		{
+			"first_name": "Clark",
+			"last_name": "Kent",
+			"hair_color": "black",
+			"has_dog": true
+		},
+		{
+			"first_name": "Bruce",
+			"last_name": "Wayne",
+			"hair_color": "black",
+			"has_dog": false
+		}
+	]
+	`
+	// unmarshall JSON using the custom Person struct that we created
+	// is a slice of Person as this JSON might have one or more entries
+	var unmarshalled []Person
+
+	// using json.Unmarshal()
+	// takes a slice of bytes, an interface that you going to put the contents into
+	// to convert a string to a slice of bytes []byte(myJson)
+	err := json.Unmarshal([]byte(myJson), &unmarshalled)
+	if err != nil {
+		log.Println("Error unmarshalling json", err)
+	}
+
+	// %v refers to an interface, which is unmarshalled
+	log.Printf("unmarshalled: %v", unmarshalled) // unmarshalled: [{Clark Kent black true} {Bruce Wayne black false}]
+
+	// write json from a struct
+	var mySlice []Person
+
+	var m1 Person
+	m1.FirstName = "Logan"
+	m1.LastName = "Wolverine"
+	m1.HairColor = "black"
+	m1.HasDog = false
+
+	var m2 Person
+	m2.FirstName = "Scarlett"
+	m2.LastName = "Witch"
+	m2.HairColor = "red"
+	m2.HasDog = true
+
+	mySlice = append(mySlice, m1)
+	mySlice = append(mySlice, m2)
+
+	// in production use json.Marshal (very small json but not readable)
+	// json.mMarshalIndent (make it readable with indentation)
+	// using no prefix
+	newJson, err := json.MarshalIndent(mySlice, "", "	")
+	if err != nil {
+		log.Println("error marshalling", err)
+	}
+	// normal write will be a slice of bytes (that is what is being returned from json.Marshall)
+	// use fmt package to format and convert the slice of bytes to string
+	fmt.Println(string(newJson))
+	// [
+	//
+	//	        {
+	//				"first_name": "Logan",
+	//				"last_name": "Wolverine",
+	//				"hair_color": "black",
+	//				"has_dog": false
+	//		},
+	//		{
+	//				"first_name": "Scarlett",
+	//				"last_name": "Witch",
+	//				"hair_color": "red",
+	//				"has_dog": true
+	//		}
+	//
+	// ]
 }
 
 const numPool = 1000
