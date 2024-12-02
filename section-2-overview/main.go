@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/ngyewkong/myniceprogram/helpers"
+	"golang.org/x/exp/rand"
 )
 
 // package level variables declared outside out of the main function
@@ -354,6 +355,36 @@ func main() {
 	var myVar helpers.SomeType
 	myVar.TypeName = "Some Name"
 	log.Println(myVar.TypeName)
+
+	// channels in golang
+	// create channels using make() function
+	// chan int -> creating an integer channel
+	// channel is a place to send information which will be received in one or more places in the program
+	intChan := make(chan int)
+
+	// good practice to defer and close the int chan
+	// defer close(intChan) -> after the keyword defer, execute that as soon as the current function is done
+	// useful in opening files, connecting to db
+	// leaving all files open during read/write -> will run out of handles at a given time
+	defer close(intChan)
+
+	// running the routine as its goroutine (concurrent) using go keyword
+	go CalculateValue(intChan)
+
+	// getting the CalculateValue randomNumber from the int chan
+	randNum := <-intChan
+	log.Println(randNum) // printing random numbers 0 to 999
+}
+
+const numPool = 1000
+
+// function that takes in an channel of integers
+func CalculateValue(intChan chan int) {
+	// as of go >1.20, no need to specify seed number unless you want reproducibility
+	rand.Seed(uint64(time.Now().UnixNano()))
+	randomNum := helpers.RandomNumber(numPool)
+	// pass the randomNum into the int chan
+	intChan <- randomNum
 }
 
 // utility function that use the Animal Interface
