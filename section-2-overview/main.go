@@ -9,6 +9,7 @@ package main
 // import the fmt package from the std lib
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"sort"
@@ -462,6 +463,14 @@ func main() {
 	//		}
 	//
 	// ]
+
+	// call divide function
+	result, err := divide(100.0, 0)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println("result of division is", result)
 }
 
 const numPool = 1000
@@ -532,4 +541,20 @@ func saySomethingWithSameVarNames(numString2 string) (string, string) {
 	log.Println("this numString2 is being called in saySomethingWithSameVarName is", numString2, "which is parameter passed in function call")
 
 	return numString2, "helllloooo"
+}
+
+// for demo-ing testing in go
+// error is a built in interface
+func divide(x, y float32) (float32, error) {
+	var result float32
+
+	// raise error when division by 0
+	if y == 0 {
+		// errors.New() allow us to create our own error message
+		return result, errors.New("cannot divide by 0")
+	}
+
+	result = x / y
+	// we can return nil to error as the base case is handled
+	return result, nil
 }
