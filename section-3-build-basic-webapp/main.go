@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -25,6 +26,31 @@ func addValue(x, y int) int {
 	return x + y
 }
 
+// Divide page handler
+func Divide(w http.ResponseWriter, r *http.Request) {
+	f, err := divideValue(100.0, 0.0)
+	if err != nil {
+		fmt.Fprintf(w, "Cannot divide by zero")
+
+		// this return is important
+		// this stop executing the func so the line 40 does not get executed when there is an err
+		return
+	}
+
+	fmt.Fprintf(w, fmt.Sprintf("%f divided by %f is %f", 100.0, 00.0, f))
+
+}
+
+// divideValue will return float32 and error (in case of division by 0 if not error will be nil)
+func divideValue(x, y float32) (float32, error) {
+	if y == 0 {
+		err := errors.New("cannot divide by 0")
+		return 0, err
+	}
+	result := x / y
+	return result, nil
+}
+
 func main() {
 	// using the built-in package http
 	// HandleFunc takes a string for the endpoint to listen to, and a handler function
@@ -47,6 +73,7 @@ func main() {
 	// refactor http handler function
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/about", About)
+	http.HandleFunc("/divide", Divide)
 
 	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber))
 	// to listen for requests use http.ListenAndServe()
