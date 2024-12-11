@@ -1,8 +1,8 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
@@ -12,44 +12,57 @@ const portNumber = ":8080"
 
 // homepage handler function
 func Home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "This is the home page")
+	renderTemplate(w, "home.page.tmpl")
 }
 
 // about page handler
 func About(w http.ResponseWriter, r *http.Request) {
-	sum := addValue(2, 2)
-	fmt.Fprintf(w, fmt.Sprintf("This is the about page and 2 + 2 is %d", sum))
+	renderTemplate(w, "about.page.tmpl")
 }
 
-// need to make it private as it shld not be accessible outside of this package using lowercase (addValue instead of AddValue)
-func addValue(x, y int) int {
-	return x + y
-}
+// render templates function that do not return anything as it is all written to the http response writer
+func renderTemplate(w http.ResponseWriter, tmpl string) {
+	// parse the template using std lib template package
+	// take a string to the path of the templates which is located in templates/
+	parsedTemplate, _ := template.ParseFiles("./templates/" + tmpl)
 
-// Divide page handler
-func Divide(w http.ResponseWriter, r *http.Request) {
-	f, err := divideValue(100.0, 0.0)
+	// .Execute take in the response writer & data to write to
+	err := parsedTemplate.Execute(w, nil)
+
 	if err != nil {
-		fmt.Fprintf(w, "Cannot divide by zero")
-
-		// this return is important
-		// this stop executing the func so the line 40 does not get executed when there is an err
-		return
+		fmt.Println("error parsing template:", err)
 	}
-
-	fmt.Fprintf(w, fmt.Sprintf("%f divided by %f is %f", 100.0, 00.0, f))
-
 }
 
-// divideValue will return float32 and error (in case of division by 0 if not error will be nil)
-func divideValue(x, y float32) (float32, error) {
-	if y == 0 {
-		err := errors.New("cannot divide by 0")
-		return 0, err
-	}
-	result := x / y
-	return result, nil
-}
+// // need to make it private as it shld not be accessible outside of this package using lowercase (addValue instead of AddValue)
+// func addValue(x, y int) int {
+// 	return x + y
+// }
+
+// // Divide page handler
+// func Divide(w http.ResponseWriter, r *http.Request) {
+// 	f, err := divideValue(100.0, 0.0)
+// 	if err != nil {
+// 		fmt.Fprintf(w, "Cannot divide by zero")
+
+// 		// this return is important
+// 		// this stop executing the func so the line 40 does not get executed when there is an err
+// 		return
+// 	}
+
+// 	fmt.Fprintf(w, fmt.Sprintf("%f divided by %f is %f", 100.0, 00.0, f))
+
+// }
+
+// // divideValue will return float32 and error (in case of division by 0 if not error will be nil)
+// func divideValue(x, y float32) (float32, error) {
+// 	if y == 0 {
+// 		err := errors.New("cannot divide by 0")
+// 		return 0, err
+// 	}
+// 	result := x / y
+// 	return result, nil
+// }
 
 func main() {
 	// using the built-in package http
@@ -73,7 +86,7 @@ func main() {
 	// refactor http handler function
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/about", About)
-	http.HandleFunc("/divide", Divide)
+	// http.HandleFunc("/divide", Divide)
 
 	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber))
 	// to listen for requests use http.ListenAndServe()
